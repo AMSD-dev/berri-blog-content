@@ -1,0 +1,78 @@
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SITE_URL = "https://berriapp.ca"; // the app's real domain, not this repo
+
+// Canonical blog URLs are always lowercase. Article FILES may still be
+// mixed-case; the app/Lambda handle that (see `file` in the Lambda). Only
+// the public URL form matters here.
+const rawPosts = JSON.parse(
+  await readFile(path.resolve(__dirname, "../manifest.json"), "utf-8")
+);
+const posts = rawPosts.map((p) => ({ ...p, slug: p.slug.toLowerCase() }));
+
+const seen = new Set();
+for (const p of posts) {
+  if (seen.has(p.slug)) throw new Error(`Duplicate slug after lowercasing: ${p.slug}`);
+  seen.add(p.slug);
+}
+for (const p of rawPosts) {
+  if (p.slug !== p.slug.toLowerCase()) {
+    console.warn(`[content] note: "${p.slug}" is mixed-case; public URL will be /blog/${p.slug.toLowerCase()}`);
+  }
+}
+
+function escapeXml(str = "") {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// --- blog-sitemap.xml (referenced as a child sitemap from the app's main sitemap.xml) ---
+// Articles only. Tag pages are deliberately NOT listed: they are thin lists of
+// posts already in the blog index and are served with noindex.
+const sitemapUrls = posts.map((p) => ({
+  loc: `${SITE_URL}/blog/${p.slug}`,
+  lastmod: p.updatedDate ?? p.publishDate,
+}));
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls
+  .map((u) => `  <url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod></url>`)
+  .join("\n")}
+</urlset>
+`;
+await writeFile(path.resolve(__dirname, "../blog-sitemap.xml"), sitemap);
+
+// --- rss.xml ---
+const items = posts
+  .map(
+    (p) => `    <item>
+      <title>${escapeXml(p.title)}</title>
+      <link>${SITE_URL}/blog/${p.slug}</link>
+      <guid isPermaLink="true">${SITE_URL}/blog/${p.slug}</guid>
+      <pubDate>${new Date(p.publishDate).toUTCString()}</pubDate>
+      <description>${escapeXml(p.description)}</description>
+    </item>`
+  )
+  .join("\n");
+const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Berri — Healthy Living Articles</title>
+    <link>${SITE_URL}/blog</link>
+    <description>Berri's Nutrition Insights Artciles explore micronutrients, gut health, food composition, and practical strategies for building healthier eating habits.</description>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${items}
+  </channel>
+</rss>
+`;
+await writeFile(path.resolve(__dirname, "../rss.xml"), rss);
+
+// --- llms-articles.txt (fragment merged into the app's llms.txt at request time) ---
+const llms = posts
+  .map((p) => `- [${p.title}](${SITE_URL}/blog/${p.slug}): ${p.description}`)
+  .join("\n");
+await writeFile(path.resolve(__dirname, "../llms-articles.txt"), llms + "\n");
+
+console.log(`[content] feeds regenerated for ${posts.length} article(s)`);
