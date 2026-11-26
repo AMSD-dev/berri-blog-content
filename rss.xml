@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Berri Articles</title>
+    <title>Berri — Healthy Living Articles</title>
     <link>https://berriapp.ca/blog</link>
-    <description>Articles micronutrient nutrition, nutrient adequacy, food composition, gut health and practical nutrition habits.</description>
-    <lastBuildDate>Tue, 24 Nov 2026 20:05:00 GMT</lastBuildDate>
+    <description>Berri's Nutrition Insights Articles explore micronutrients, gut health, food composition, and practical strategies for building healthier eating habits.</description>
+    <lastBuildDate>Thu, 26 Nov 2026 05:30:55 GMT</lastBuildDate>
+    <item>
+      <title>Beyond Calories: Why Nutrient Density Matters More Than You Think</title>
+      <link>https://berriapp.ca/blog/beyond-calories-why-nutrient-density-matters</link>
+      <guid isPermaLink="true">https://berriapp.ca/blog/beyond-calories-why-nutrient-density-matters</guid>
+      <pubDate>Thu, 26 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Calories tell you how much energy food provides. Nutrient density adds another important question: what vitamins, minerals, fibre and protein come with it?</description>
+    </item>
   </channel>
 </rss>
