@@ -3,8 +3,8 @@ title: "Beyond Calories: Why Nutrient Density Matters More Than You Think"
 description: "Calories tell you how much energy food provides. Nutrient density adds another important question: what vitamins, minerals, fibre and protein come with it?"
 author:
   name: "Berri Editorial Team"
-publishDate: "2026-11-26"
-featuredImage: "/blog-images/beyond-calories-nutrient-density/cover.webp"
+publishDate: "2026-11-24"
+featuredImage: "/images/beyond-calories-nutrient-density/cover.webp"
 featuredImageAlt: "A colourful balanced meal with vegetables, whole grains, beans, salmon, nuts and fruit"
 tags: ["nutrient density", "micronutrients", "healthy eating", "nutrition basics", "diet quality"]
 category: "Nutrition Basics"
