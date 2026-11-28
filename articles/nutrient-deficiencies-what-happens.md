@@ -4,7 +4,7 @@ description: "Learn what a nutrient deficiency really means, why it develops, ho
 author:
   name: "Berri Editorial Team"
 publishDate: "2026-11-26"
-featuredImage: "/images/nutrient-deficiencies-what-happens/cover.webp"
+featuredImage: "images/nutrient-deficiencies-what-happens/cover.webp"
 featuredImageAlt: "A balanced meal with a variety of vegetables, whole grains, legumes, and protein-rich foods"
 tags: ["nutrient deficiency", "micronutrients", "vitamins and minerals", "nutrition basics", "dietary intake"]
 category: "Nutrition Fundamentals"
